@@ -4,8 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 const REDIS_CLOUD_URL = process.env.REDIS_CLOUD_URL ;
+console.log(REDIS_CLOUD_URL)
 
-let client = createClient(REDIS_CLOUD_URL);
+let client = createClient({
+  url: REDIS_CLOUD_URL
+});
 
 
 (async () => {
@@ -22,6 +25,9 @@ let client = createClient(REDIS_CLOUD_URL);
   
   process.on('SIGINT', () => client.quit());
   
+  await client.set('key', 'value');
+  const value = await client.get('key');
+  console.log(value);
 })()
 
 export default client;
