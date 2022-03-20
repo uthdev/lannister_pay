@@ -2,8 +2,9 @@ import { Router } from 'express';
 import FeesController from '../controllers/feesController';
 const router = Router();
 
-const { setUpFee } = FeesController
+const { setUpFee, computeTransactionFee } = FeesController
 /* GET users listing. */
-router.post('/', setUpFee);
+router.post('/fees', setUpFee);
+router.post('/compute-transaction-fee', computeTransactionFee);
 
 export default router;
