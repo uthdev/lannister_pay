@@ -29,7 +29,6 @@ The api is documented with [Postman](https://documenter.getpostman.com/view/6265
 
 - Node.js
 - Express.js
-- Redis
 - ESLint
 
 ---

@@ -2,10 +2,12 @@ import createError from 'http-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import dotenv from 'dotenv';
 
-import client from './helpers/init_redis';
 import indexRouter from '#routes/index';
 import feesRouter from '#routes/fees';
+
+dotenv.config()
 
 const app = express();
 

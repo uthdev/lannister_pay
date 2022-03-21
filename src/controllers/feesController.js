@@ -1,17 +1,19 @@
 import parseFeeConfigurationSpec from '../helpers/parseFeeConfigurationSpec';
-import client from '../helpers/init_redis';
 
 export default class  FeesController {
+  static #feeConfigurationSpecs = [];
+
   static async setUpFee(req, res, next) {
     try {
       const {FeeConfigurationSpec} = req.body;
       const bulkFCS = parseFeeConfigurationSpec(FeeConfigurationSpec);
-      await client.set('FeeConfigurationSpec', JSON.stringify(bulkFCS));
+      FeesController.#feeConfigurationSpecs.push(...bulkFCS);
       return res.status(200).json({
         "status": "ok"
       })
       
     } catch (error) {
+      console.error(error)
       next(error);
     }
   }
@@ -27,8 +29,10 @@ export default class  FeesController {
     });
     let locale = CurrencyCountry == Country ? 'LOCL' : 'INTL';
     try {
-      const FCSs = await client.get('FeeConfigurationSpec');
-      const feeConfigurationSpecs = JSON.parse(FCSs)
+      const feeConfigurationSpecs = FeesController.#feeConfigurationSpecs;
+      if(feeConfigurationSpecs.length < 1) {
+        return res.status(404).json({ "Error": "Fee configuration specs does not exist." });
+      }
       let applicableFCS;
       for (let i = 0; i < feeConfigurationSpecs.length; i++) {
         const {feeLocale, feeEntity, entityProperty } = feeConfigurationSpecs[i];
